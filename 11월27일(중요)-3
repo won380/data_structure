@@ -1,0 +1,64 @@
+#define _CRT_SECURE_NO_WARNINGS
+/*
+* 주석하기: 주석할 영역 드래그 후 ctrl + k + c
+* 주석해제하기: 주석 해재 할 영역 드래그 후 ctrl + k + u
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+* 실습코드목적: 링크드 리스트 삽입
+*/
+
+typedef struct node {
+	int data;
+	struct node* link;
+} Node;
+
+void main() {
+	Node* head = NULL;  // 링크드 리스트의 식별자
+	Node* new_node;
+	Node* p;
+	for (int i = 1; i <= 10; i++) {
+		new_node = (Node*)malloc(sizeof(Node));
+		new_node->data = i; new_node->link = NULL;
+
+		if (head == NULL) { // 링크드 리스트에 노드가 하나도 없다면?
+			head = new_node; continue;
+		}
+		// 링크드 리스트에 노드가 1개 이상 일 경우?
+		p = head;
+		while (p->link) p = p->link; // 마지막 노드를 가르킬 수 있도록 p를 이동
+		// 마지막노드를 가르키는 p
+		// 이 p가 가르키는 노드의 link에 새로운 노드 추가
+		p->link = new_node;
+	}
+
+	// 첫번째 위치(head)에 노드 삽입
+	/*new_node = (Node*)malloc(sizeof(Node));
+	new_node->data = 0; new_node->link = head;
+	head = new_node;*/
+
+	// 중간 위치(예제는 data가 2인 노드의 앞)에 노드 삽입
+	p = head; // p를 통한 탐색 시작
+	Node* prev_node = NULL;
+	new_node = (Node*)malloc(sizeof(Node));
+	new_node->data = -1; new_node->link = NULL;
+	while (p) {
+		if (prev_node && p->data == 2) {//2를 찾아 2앞에 삽입
+			prev_node->link = new_node;
+			new_node->link = p;
+			break;
+		}
+		prev_node = p;
+		p = p->link;
+	}
+
+	// 모든 노드 출력
+	p = head;
+	while (p) { //p가 가르키는 노드가 존재한다면
+		printf("[%d] %s ", p->data, p->link ? "->" : " ");
+		p = p->link;
+	}
+
+}
