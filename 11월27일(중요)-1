@@ -1,0 +1,60 @@
+#define _CRT_SECURE_NO_WARNINGS //중요함. 교수님이 계속 강조함(자료구조 기말고사 11월27일),간단한버전
+/*
+* 주석하기: 주석할 영역 드래그 후 ctrl + k + c
+* 주석해제하기: 주석 해재 할 영역 드래그 후 ctrl + k + u
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+	int data;
+	struct node* link;
+} Node;
+
+void main() {
+	Node node_1 = { 1, NULL };
+	Node node_2 = { 2, NULL };
+	Node node_3 = { 3, NULL };
+	Node node_4 = { 4, NULL };
+//구조체 4개를 만듬, 데이터는 (1,2,3,4), 링크는 아무것(NULL)도 없음(구조체가 2개의 칸으로 구성 윗칸이 데이터)
+	node_1.link = &node_2;
+	node_2.link = &node_3;
+	node_3.link = &node_4;
+	//노드 원 구조체 안 링크변수에 노드 2의 주소값을 넣음
+
+	/* 각각의 노드의 정보를 출력 */
+	printf("# 각 노드의 정보 출력\n");
+
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		1, &node_1, node_1.data, node_1.link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		2, &node_2, node_2.data, node_2.link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		3, &node_3, node_3.data, node_3.link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		4, &node_4, node_4.data, node_4.link);
+	printf("====================================\n");
+
+
+
+	/* node_01을 이용하여 모든 노드 출력 */
+	printf("# node_01을 이용하여 모든 노드 출력\n");
+	int node_number = 1;
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		node_number++, &node_1, node_1.data, node_1.link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		node_number++, node_1.link, node_1.link->data,//->는 참조한다은 뜻,
+		node_1.link->link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		node_number++, node_1.link->link,
+		node_1.link->link->data, node_1.link->link->link);
+	printf("node_%d의 address: %d, data: %d, link: %d\n",
+		node_number++, node_1.link->link->link,
+		node_1.link->link->link->data,
+		node_1.link->link->link->link);
+	printf("====================================\n");
+
+
+
+}
