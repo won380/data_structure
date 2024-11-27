@@ -1,0 +1,49 @@
+#define _CRT_SECURE_NO_WARNINGS
+/*
+* 주석하기: 주석할 영역 드래그 후 ctrl + k + c
+* 주석해제하기: 주석 해재 할 영역 드래그 후 ctrl + k + u
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+* 문제점:
+   1) 링크드리스트_01.c에서 N개의 노드에 대해 각각 식별자(변수)가 존재함.
+		  즉, 변수와 동일한 형태
+   2) 링크드리스트_01.c에서 N개의 노드를 연결하고,
+		  이를 출력하기 위해 link->link->link 등 여러번 호출함
+* 실습코드목적: 포인터를 이용하여 추가 및 접근 하기
+*/
+
+typedef struct node {
+	int data;
+	struct node* link;
+} Node;
+
+void main() {
+	Node* head = NULL;  // 링크드 리스트의 식별자
+	Node* new_node;
+	Node* p;
+	for (int i = 1; i <=15 i++) {//반복문을 통해 노드를 만들어 둠 (포임터 헤드와 P를 통해)
+		new_node = (Node*)malloc(sizeof(Node)); //새로운 노드라는 변수,공간을 만들어서 선언(몰록).공간을 할당(Node*)
+		new_node->data = i; new_node->link = NULL;//포인터에 접근하는 화살표를 통해 테이터를 참조해 i,링크는 null
+
+		if (head == NULL) { // 링크드 리스트에 노드가 하나도 없다면? 
+			head = new_node; continue; //헤더 변수의 첫번째 변수를 가리킴
+		}//한번만 실행하게 됨(왜냐하면 실행 후에는 null이 아니기 때문)
+		// 링크드 리스트에 노드가 1개 이상 일 경우?
+		p = head;
+		while (p->link) p = p->link; // 마지막 노드를 가르킬 수 있도록 p를 이동
+		// 마지막노드를 가르키는 p
+		// 이 p가 가르키는 노드의 link에 새로운 노드 추가
+		p->link = new_node; //p는 헤더를 따라가 링크를 꺼내옴, null이 나올때까지, 끝까지 갔면 새로운 노드에 시작 주소값을 넣음.
+	}
+
+	// 모든 노드 출력
+	p = head;
+	while (p) { //p가 가르키는 노드가 존재한다면
+		printf("[%d] %s ", p->data, p->link ? "->" : " ");
+		p = p->link;
+	}
+	//p의 값이 있는지 없는지 봄, 
+}
