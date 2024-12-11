@@ -1,0 +1,199 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include <time.h>
+
+#define SWAP(x,y,t) ((t)=(x), (x)=(y), (y)=(t))  // 매크로로 구현
+//두 리스트가 정렬되어있어야한다(선행조건)
+
+typedef struct Node {
+
+	int		data;
+
+	struct 	Node* next;
+
+} Node;
+
+void printArray(int arr[], int n)
+
+{
+
+	for (int i = 0; i < n; i++)
+
+		printf("%d ", arr[i]);
+
+	printf("\n");
+
+}
+
+void printList(Node* ptr)
+
+{
+
+	for (; ptr; ptr = ptr->next)
+
+		printf("[%d]->", ptr->data);
+
+	printf("x\n");
+
+}
+
+void sel_sort(int list[], int n)		// 선택 정렬
+
+{
+
+	int i, j, min, temp;
+
+	for (i = 0; i < n - 1; i++) {  // list[i]부터 list[n-1]까지 정렬.
+
+		min = i;	      // i 위치에 들어갈 최소값의 초기화
+
+		for (j = i + 1; j < n; j++)
+
+			if (list[j] < list[min])
+
+				min = j;    // 더 작은 것이 있으면 최소값을 이 곳으로…
+
+		SWAP(list[i], list[min], temp);  // 최소값과 i의 내용을 교체
+
+	}
+
+}
+
+Node* makeSortedList(int n)
+
+{
+
+	int* list = (int*)malloc(sizeof(int) * n);
+
+	Node* front = NULL, * rear = NULL, * temp;
+
+	// srand(time(NULL));
+
+	for (int i = 0; i < n; i++)		// 난수 발생
+
+		list[i] = rand() % 20;
+
+	printf("%d개의 난수 생성: ", n);
+
+	printArray(list, n);
+
+	sel_sort(list, n);				// 선택 정렬
+
+	printf("%d개를 선택정렬 후: ", n);
+
+	printArray(list, n);
+
+	for (int i = 0; i < n; i++)  	// 순서대로 리스트 생성 --> 큐 add 방식
+
+	{
+
+		temp = (Node*)malloc(sizeof(Node));
+
+		temp->data = list[i];
+
+		temp->next = NULL;
+
+		if (front)
+
+			rear->next = temp;
+
+		else
+
+			front = temp;
+
+		rear = temp;
+
+	}
+
+	return front;
+
+}
+
+Node* merge_2lists(Node* l1, Node* l2)
+
+{
+
+	Node* front, * rear;
+
+	rear = (Node*)malloc(sizeof(Node));	// 큐의 첫 노드 임시 생성
+
+	rear->next = NULL;
+
+	front = rear;
+
+	while (l1 && l2)		// 각 리스트위 두 노드 비교 --> 작은 것 큐에 add
+
+	{
+
+		if (l1->data < l2->data)//비교, 엘2가 더 큼 
+
+		{
+
+			rear->next = l1;//그러면 엘1의 주소값을 넣음
+
+			l1 = l1->next;//엘1을 다음으로 이동
+
+		}
+
+		else//엘1이 크거나 같다
+
+		{
+
+			rear->next = l2;//엘2의 주소값을 넣음
+
+			l2 = l2->next;//엘2를 다음으로 이동
+
+		}
+		//작을 걸 연결시켜줌
+		rear = rear->next;//리어의 연결 바꿈
+
+	}
+	// 남아 있는 리스트는 그냥 큐 뒤에 붙임
+	if (l1)		//만약 엘1이 남았다면				
+
+		rear->next = l1;//리어의 넥스트에 엘1을 넣음
+
+	else      //만약 엘2가 남았다면
+
+		rear->next = l2;
+
+	return front->next;		// 임시 노드 다음을 리턴, 임시 노드는 free시켜야 함!!
+
+}
+
+int main()
+
+{
+
+	int		na = 7, nb = 4;
+
+	Node* result, * a, * b;
+
+	a = makeSortedList(na);
+
+	printf("연결리스트로 연결 a->");
+
+	printList(a);
+
+	printf("\n");
+
+	b = makeSortedList(nb);
+
+	printf("연결리스트로 연결 b->");
+
+	printList(b);
+
+	printf("\n");
+
+	result = merge_2lists(a, b);
+
+	printf("연결리스트 합병 ->");
+
+	printList(result);
+
+	return 0;
+
+}
+
